@@ -2,26 +2,47 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import "./topics.css";
 import { useSelector, useDispatch } from "react-redux";
+import { addTopic } from "../features/topics/topicsSlice";
 import { loadIcons, selectAllIcons } from "../features/icons/iconsSlice";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import { Modal } from "./modal";
+import { selectAddTopicStatus } from "../features/topics/topicsSlice";
 
 export const Topic = () => {
-  const [isCreate, setIsCreate] = useState(false);
-  const [selectedIcon, setSelectedIcon] = useState("");
   const [nameTopic, setNameTopic] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState("");
+
+  const [isCreate, setIsCreate] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const dispatch = useDispatch();
   const allIcons = useSelector(selectAllIcons);
+  const addTopicStatus = useSelector(selectAddTopicStatus);
 
   useEffect(() => {
     dispatch(loadIcons());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (addTopicStatus.isPending) {
+      updateModal();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addTopicStatus.isPending]);
+
+  const updateModal = () => {
+    setShowModal(!showModal);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(nameTopic);
-    console.log(selectedIcon);
+    dispatch(
+      addTopic({
+        name: nameTopic,
+        iconID: selectedIcon,
+      })
+    );
   };
 
   return (
@@ -56,6 +77,7 @@ export const Topic = () => {
               <form className="text-center" onSubmit={handleSubmit}>
                 <div className="form-control mt-5">
                   <input
+                    required
                     type="text"
                     name="topic-name"
                     placeholder="Topic Name"
@@ -66,6 +88,7 @@ export const Topic = () => {
                 </div>
                 <div className="form-control mt-5">
                   <select
+                    required
                     name="icon"
                     id="icon"
                     className="w-full py-2.5 px-3 rounded-lg border-2 border-cyan-600"
@@ -84,13 +107,22 @@ export const Topic = () => {
                 <button
                   type="submit"
                   className="font-bold border mt-5 py-2 px-6 button-15"
+                  disabled={addTopicStatus.isPending}
                 >
-                  Add Topic
+                  {addTopicStatus.isPending && "Adding..."}{" "}
+                  {!addTopicStatus.isPending && "Add Topic"}
                 </button>
               </form>
             </div>
           )}
         </section>
+        <Modal
+          showModal={showModal}
+          onShowModal={updateModal}
+          title="Create status"
+          body={`Succefully adding ${nameTopic} to topic list.`}
+          buttonMessage="Got, it. thanks!"
+        />
       </TopicMaxWidth>
     </TopicWrapper>
   );

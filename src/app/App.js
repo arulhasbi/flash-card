@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { Footer } from "../components/footer";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <main>
           <Outlet />
         </main>
+        <Footer />
       </AppMaxWidth>
     </AppWrapper>
   );
