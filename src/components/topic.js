@@ -120,7 +120,7 @@ export const Topic = () => {
           showModal={showModal}
           onShowModal={updateModal}
           title="Create status"
-          body={`Succefully adding ${nameTopic} to topic list.`}
+          body={`Succefully adding ${nameTopic} to topic list`}
           buttonMessage="Got, it. thanks!"
         />
       </TopicMaxWidth>
