@@ -31,4 +31,9 @@ export const handlers = [
       })
     );
   }),
+  rest.get("/topics", (req, res, ctx) => {
+    mockDelay(500);
+    const response = topicsDB.topics.getAll();
+    return res(ctx.status(200), ctx.json(response));
+  }),
 ];

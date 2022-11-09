@@ -3,6 +3,7 @@ import { Provider } from "react-redux";
 import { store } from "./features/store";
 import App from "./app/App";
 import { Topic } from "./components/topic";
+import { NewQuiz } from "./components/newquiz";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
       {
         path: "topics",
         element: <Topic />,
+      },
+      {
+        path: "new-quiz",
+        element: <NewQuiz />,
       },
     ],
   },

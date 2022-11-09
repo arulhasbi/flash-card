@@ -27,6 +27,9 @@ export const Topic = () => {
   useEffect(() => {
     if (addTopicStatus.isPending) {
       updateModal();
+    } else {
+      setNameTopic("");
+      setSelectedIcon("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [addTopicStatus.isPending]);
@@ -64,10 +67,11 @@ export const Topic = () => {
           {isCreate && (
             <div>
               <div className="flex items-center">
-                <div className="grow flex items-center">
+                <div className="grow flex items-center gap-2">
                   <button type="button" onClick={() => setIsCreate(!isCreate)}>
                     <ArrowLeftIcon className="h-6 w-6 text-black" />
                   </button>
+                  Back
                 </div>
                 <p className="font-bold text-2xl text-center grow">
                   Create a new topic

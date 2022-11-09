@@ -1,16 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { postTopic } from "../../api/topics";
+import { postTopic, getTopics } from "../../api/topics";
 
 export const addTopic = createAsyncThunk("topics/addTopic", async (arg) => {
   const response = await postTopic(arg);
   return response;
 });
 
+export const loadTopics = createAsyncThunk("topics/loadTopics", async (arg) => {
+  const response = await getTopics();
+  return response;
+});
+
 const option = {
   name: "topics",
   initialState: {
+    topics: [],
     isAddTopicPending: false,
     isAddTopicHasError: false,
+    isLoadTopicsPending: false,
+    isLoadTopicsHasError: false,
   },
   reducers: {},
   extraReducers: {
@@ -26,6 +34,19 @@ const option = {
       state.isAddTopicPending = false;
       state.isAddTopicHasError = true;
     },
+    [loadTopics.pending]: (state, action) => {
+      state.isLoadTopicsPending = true;
+      state.isLoadTopicsHasError = false;
+    },
+    [loadTopics.fulfilled]: (state, action) => {
+      state.isLoadTopicsPending = false;
+      state.isLoadTopicsHasError = false;
+      state.topics = action.payload;
+    },
+    [loadTopics.rejected]: (state, action) => {
+      state.isLoadTopicsPending = false;
+      state.isLoadTopicsHasError = true;
+    },
   },
 };
 
@@ -39,3 +60,5 @@ export const selectAddTopicStatus = (state) => {
     hasError: state.topicsReducer.isAddTopicHasError,
   };
 };
+
+export const selectAllTopics = (state) => state.topicsReducer.topics;
