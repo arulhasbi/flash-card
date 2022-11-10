@@ -5,8 +5,10 @@ import { selectAllTopics } from "../features/topics/topicsSlice";
 import { loadTopics } from "../features/topics/topicsSlice";
 import { addQuiz } from "../features/quizzes/quizzesSlice";
 import { selectAddQuizStatus } from "../features/quizzes/quizzesSlice";
-import { Formik, Field, Form, FieldArray } from "formik";
 import { Modal } from "./modal";
+
+import * as Yup from "yup";
+import { Formik, Field, Form, FieldArray } from "formik";
 
 export const NewQuiz = () => {
   const dispatch = useDispatch();
@@ -18,26 +20,16 @@ export const NewQuiz = () => {
     dispatch(loadTopics());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const handleSubmit = (values) => {
-    dispatch(addQuiz(values));
+  const handleSubmit = async (values) => {
+    await dispatch(addQuiz(values));
   };
-  const updateModal = () => {
+  const updateModal = (callback) => {
     setShowModal(!showModal);
-  };
-  const handleTopicChange = (topicID, callback) => {
-    if (allTopics.length !== 0) {
-      if (topicID === "") {
-        callback("quiz.topic.id", "");
-        callback("quiz.topic.name", "");
-        callback("quiz.topic.iconID", "");
-      } else {
-        const topic = allTopics.find((topic) => topic.id === topicID);
-        callback("quiz.topic.id", topic.id);
-        callback("quiz.topic.name", topic.name);
-        callback("quiz.topic.iconID", topic.iconID);
-      }
+    if (typeof callback === "function") {
+      callback();
     }
   };
+
   return (
     <NewQuizWrapper className="mt-10">
       <NewQuizMaxWidth>
@@ -47,19 +39,27 @@ export const NewQuiz = () => {
               title: "",
               topic: {
                 id: "",
-                name: "",
-                iconID: "",
               },
             },
             cards: [],
           }}
+          validationSchema={Yup.object().shape({
+            quiz: Yup.object().shape({
+              title: Yup.string().required("Quiz Title is required."),
+              topic: Yup.object().shape({
+                id: Yup.string().required("A Topic needs to be selected."),
+              }),
+            }),
+          })}
+          validateOnMount={true}
           onSubmit={async (values, actions) => {
             await handleSubmit(values);
-            updateModal();
-            actions.resetForm();
+            updateModal(() => {
+              actions.resetForm();
+            });
           }}
         >
-          {({ setFieldValue, values }) => (
+          {({ isValid, values }) => (
             <Form>
               <p className="font-bold text-2xl text-center">
                 Create a New Quiz
@@ -74,11 +74,8 @@ export const NewQuiz = () => {
                   <select
                     {...field}
                     className="w-full py-2.5 px-3 rounded-lg border-2 border-cyan-600 mt-5"
-                    onChange={({ target }) =>
-                      handleTopicChange(target.value, setFieldValue)
-                    }
                   >
-                    <option value="">Choose a topic</option>
+                    <option value={undefined}>Choose a topic</option>
                     {allTopics.length !== 0 &&
                       allTopics.map((topic) => (
                         <option key={topic.id} value={topic.id}>
@@ -133,7 +130,7 @@ export const NewQuiz = () => {
                         <button
                           type="submit"
                           className="font-bold border mt-5 py-2 px-6 button-15"
-                          disabled={addQuizStatus.isPending}
+                          disabled={addQuizStatus.isPending || !isValid}
                         >
                           {addQuizStatus.isPending && "Creating..."}{" "}
                           {!addQuizStatus.isPending && "Create Quiz"}

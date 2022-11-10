@@ -41,6 +41,7 @@ const option = {
     [loadQuizzes.fulfilled]: (state, action) => {
       state.isLoadQuizzesPending = false;
       state.isLoadQuizzesHasError = false;
+      state.quizzes = action.payload;
     },
     [loadQuizzes.rejected]: (state, action) => {
       state.isLoadQuizzesPending = false;
