@@ -12,12 +12,11 @@ const mockDelay = (milliseconds) => {
 
 export const handlers = [
   rest.get("/icons", (req, res, ctx) => {
-    mockDelay(500);
     const response = icons;
     return res(ctx.status(200), ctx.json(response));
   }),
   rest.post("/topics", async (req, res, ctx) => {
-    mockDelay(2000);
+    mockDelay(1000);
     const body = await req.json();
     flashcardDB.topics.create({
       name: body.name,
@@ -32,12 +31,11 @@ export const handlers = [
     );
   }),
   rest.get("/topics", (req, res, ctx) => {
-    mockDelay(500);
     const response = flashcardDB.topics.getAll();
     return res(ctx.status(200), ctx.json(response));
   }),
   rest.post("/quizzes", async (req, res, ctx) => {
-    mockDelay(2000);
+    mockDelay(1000);
     const body = await req.json();
     const topic = flashcardDB.topics.findFirst({
       where: {
@@ -66,7 +64,6 @@ export const handlers = [
     );
   }),
   rest.get("/quizzes", (req, res, ctx) => {
-    mockDelay(500);
     const response = flashcardDB.quizzes.getAll();
     return res(ctx.status(200), ctx.json(response));
   }),
