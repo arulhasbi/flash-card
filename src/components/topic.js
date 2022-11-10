@@ -24,28 +24,25 @@ export const Topic = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (addTopicStatus.isPending) {
-      updateModal();
-    } else {
-      setNameTopic("");
-      setSelectedIcon("");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addTopicStatus.isPending]);
-
   const updateModal = () => {
     setShowModal(!showModal);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleAddTopicDispatch = () => {
     dispatch(
       addTopic({
         name: nameTopic,
         iconID: selectedIcon,
       })
     );
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await handleAddTopicDispatch();
+    updateModal();
+    setNameTopic("");
+    setSelectedIcon("");
   };
 
   return (
@@ -124,7 +121,7 @@ export const Topic = () => {
           showModal={showModal}
           onShowModal={updateModal}
           title="Create status"
-          body={`Succefully adding ${nameTopic} to topic list`}
+          body={`Succefully adding to topic list`}
           buttonMessage="Got, it. thanks!"
         />
       </TopicMaxWidth>

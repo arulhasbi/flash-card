@@ -1,6 +1,6 @@
 import { rest } from "msw";
 import { icons } from "./data/icons";
-import { topicsDB } from "./data/topics";
+import { flashcardDB } from "./data/flashcard";
 
 const mockDelay = (milliseconds) => {
   const date = Date.now();
@@ -19,7 +19,7 @@ export const handlers = [
   rest.post("/topics", async (req, res, ctx) => {
     mockDelay(2000);
     const body = await req.json();
-    topicsDB.topics.create({
+    flashcardDB.topics.create({
       name: body.name,
       iconID: body.iconID,
     });
@@ -33,7 +33,41 @@ export const handlers = [
   }),
   rest.get("/topics", (req, res, ctx) => {
     mockDelay(500);
-    const response = topicsDB.topics.getAll();
+    const response = flashcardDB.topics.getAll();
+    return res(ctx.status(200), ctx.json(response));
+  }),
+  rest.post("/quizzes", async (req, res, ctx) => {
+    mockDelay(2000);
+    const body = await req.json();
+    const topic = flashcardDB.topics.findFirst({
+      where: {
+        id: {
+          equals: body.quiz.topic.id,
+        },
+      },
+    });
+    const quiz = flashcardDB.quizzes.create({
+      title: body.quiz.title,
+      topic: topic,
+    });
+    for (const card of body.cards) {
+      flashcardDB.cards.create({
+        front: card.front,
+        back: card.back,
+        quiz: quiz,
+      });
+    }
+    return res(
+      ctx.status(200),
+      ctx.json({
+        status: 200,
+        result: "success",
+      })
+    );
+  }),
+  rest.get("/quizzes", (req, res, ctx) => {
+    mockDelay(500);
+    const response = flashcardDB.quizzes.getAll();
     return res(ctx.status(200), ctx.json(response));
   }),
 ];

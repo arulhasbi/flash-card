@@ -1,18 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAllTopics } from "../features/topics/topicsSlice";
 import { loadTopics } from "../features/topics/topicsSlice";
-
+import { addQuiz } from "../features/quizzes/quizzesSlice";
+import { selectAddQuizStatus } from "../features/quizzes/quizzesSlice";
 import { Formik, Field, Form, FieldArray } from "formik";
+import { Modal } from "./modal";
 
 export const NewQuiz = () => {
   const dispatch = useDispatch();
   const allTopics = useSelector(selectAllTopics);
+  const addQuizStatus = useSelector(selectAddQuizStatus);
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     dispatch(loadTopics());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const handleSubmit = (values) => {
+    dispatch(addQuiz(values));
+  };
+  const updateModal = () => {
+    setShowModal(!showModal);
+  };
   const handleTopicChange = (topicID, callback) => {
     if (allTopics.length !== 0) {
       if (topicID === "") {
@@ -42,8 +53,10 @@ export const NewQuiz = () => {
             },
             cards: [],
           }}
-          onSubmit={(values) => {
-            window.alert(JSON.stringify(values, null, 2));
+          onSubmit={async (values, actions) => {
+            await handleSubmit(values);
+            updateModal();
+            actions.resetForm();
           }}
         >
           {({ setFieldValue, values }) => (
@@ -120,8 +133,10 @@ export const NewQuiz = () => {
                         <button
                           type="submit"
                           className="font-bold border mt-5 py-2 px-6 button-15"
+                          disabled={addQuizStatus.isPending}
                         >
-                          Create Quiz
+                          {addQuizStatus.isPending && "Creating..."}{" "}
+                          {!addQuizStatus.isPending && "Create Quiz"}
                         </button>
                       </div>
                     </div>
@@ -132,6 +147,13 @@ export const NewQuiz = () => {
           )}
         </Formik>
       </NewQuizMaxWidth>
+      <Modal
+        showModal={showModal}
+        onShowModal={updateModal}
+        title="Create status"
+        body={`Succefully adding to quiz list`}
+        buttonMessage="Got, it. thanks!"
+      />
     </NewQuizWrapper>
   );
 };
