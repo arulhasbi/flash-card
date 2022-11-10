@@ -4,6 +4,7 @@ import { store } from "./features/store";
 import App from "./app/App";
 import { Topic } from "./components/topic";
 import { NewQuiz } from "./components/newquiz";
+import { Quizzes } from "./features/quizzes/quizzes";
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "new-quiz",
         element: <NewQuiz />,
+      },
+      {
+        path: "quizzes",
+        element: <Quizzes />,
       },
     ],
   },

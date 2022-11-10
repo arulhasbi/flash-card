@@ -7,7 +7,7 @@ import "./App.css";
 
 function App() {
   return (
-    <AppWrapper>
+    <AppWrapper className="px-10">
       <AppMaxWidth className="max-w-[700px] mr-auto ml-auto">
         <p className="border button-85 mt-10 text-center w-max mr-auto ml-auto font-extrabold">
           React Flash Card
