@@ -24,12 +24,15 @@ export const Topic = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateModal = () => {
+  const updateModal = (callback) => {
     setShowModal(!showModal);
+    if (typeof callback === "function") {
+      callback();
+    }
   };
 
-  const handleAddTopicDispatch = () => {
-    dispatch(
+  const handleAddTopicDispatch = async () => {
+    await dispatch(
       addTopic({
         name: nameTopic,
         iconID: selectedIcon,
@@ -40,9 +43,10 @@ export const Topic = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     await handleAddTopicDispatch();
-    updateModal();
-    setNameTopic("");
-    setSelectedIcon("");
+    updateModal(() => {
+      setNameTopic("");
+      setSelectedIcon("");
+    });
   };
 
   return (
