@@ -67,4 +67,12 @@ export const handlers = [
     const response = flashcardDB.quizzes.getAll();
     return res(ctx.status(200), ctx.json(response));
   }),
+  rest.get("/cards", (req, res, ctx) => {
+    const quizID = req.url.searchParams.get("id");
+    let cards = flashcardDB.cards.getAll();
+    cards = cards.filter((card) => {
+      return card.quiz.id === quizID;
+    });
+    return res(ctx.status(200), ctx.json(cards));
+  }),
 ];

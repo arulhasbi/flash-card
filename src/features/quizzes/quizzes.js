@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { loadQuizzes, selectAllQuiz } from "./quizzesSlice";
 import { useNavigate } from "react-router-dom";
+import { ModalQuiz } from "../../components/modalQuiz";
 import "./quizzes.css";
 
 export const Quizzes = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [quiz, setQuiz] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const allQuiz = useSelector(selectAllQuiz);
@@ -13,8 +16,14 @@ export const Quizzes = () => {
     dispatch(loadQuizzes());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const updateModal = (quiz) => {
+    if (quiz) {
+      setQuiz(quiz);
+    }
+    setShowModal(!showModal);
+  };
   return (
-    <QuizzesWrapper className="mt-14">
+    <QuizzesWrapper className="mt-10">
       <QuizzesMaxWidth>
         <section className="max-w-[500px] mr-auto ml-auto">
           {!(allQuiz.length !== 0) ? (
@@ -39,7 +48,11 @@ export const Quizzes = () => {
                     {quiz.title}
                   </p>
                 </div>
-                <button type="button" className="button-54">
+                <button
+                  type="button"
+                  className="button-54"
+                  onClick={() => updateModal(quiz)}
+                >
                   Play Quiz
                 </button>
               </div>
@@ -47,6 +60,13 @@ export const Quizzes = () => {
           )}
         </section>
       </QuizzesMaxWidth>
+      {quiz && (
+        <ModalQuiz
+          showModal={showModal}
+          onShowModal={updateModal}
+          quiz={quiz ? quiz : null}
+        />
+      )}
     </QuizzesWrapper>
   );
 };
