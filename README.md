@@ -24,6 +24,7 @@ Obviously, this project lacks a lot of features, because the main objective is t
 3. Add form validation to cards adding form
 4. Add more cards to a selected quiz
 5. Add unit testing
+6. Fix unexpected behaviours
 
 etc.
 
