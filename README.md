@@ -15,7 +15,7 @@ Follow guidelines below to use the site:
 4. Go to quizzes page and hit play button
 5. Hint: click the question to get the answer 
 
-Obviously, this project lacks a lot of features, because the main objective is to use my current knowledge about react from life-cycle hooks, router to state-management with redux. It's not perfect but I'm proud of it and I think it's a pretty cool project and there are still a lot of react subjects that I want to learn such as planning a project architecture, rendering optimization, component design pattern, etc. Tomorrow, I am planning to do another project, a pair-matching, kind of memorizing game. Let's see what new things I could learn. 
+Obviously, this project lacks a lot of features, because the main objective is to use my current knowledge about react from life-cycle hooks, router to state-management with redux. It's not perfect but I'm proud of it and I think it's a pretty cool project and there are still a lot of react subjects that I want to learn such as planning a project architecture, rendering optimization, component design pattern, etc.
 
 **NOTE**: For anyone who is currently learning front-end framework (not limited to react), you guys could start by building a simple project like this. Also check my other works in the repository for project inspiration. For you guys who is currently learning react, please do fork this project and try to add new features. I already tried to create the project app structure as neat as possible, so you guys might not have any difficulties to follow along. Here are some of my suggesstions for new features.
 
