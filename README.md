@@ -22,6 +22,8 @@ Obviously, this project lacks a lot of features, because the main objective is t
 1. Optimizing the layout for mobile usage
 2. Filter create quizzes with category
 3. Add form validation to cards adding form
+4. Add more cards to a selected quiz
+
 etc.
 
 This project was inspired by codecademy course project, but I only took the app looks, how they work as inspiration and coded mainly from scratch. I also used some css snippets from [css-scan](https://getcssscan.com/css-buttons-examples) to create stunning buttons.
