@@ -47,7 +47,7 @@ This project was inspired by codecademy course project, but I only took the app 
 - yup: `^0.32.11`
 - @faker-js/faker: `^7.6.0`
 - @mswjs/data: `^0.11.0`
-- msw": `^0.48.0`
+- msw: `^0.48.0`
 - tailwindcss": `^3.2.2`
 
 ### Available Scripts
